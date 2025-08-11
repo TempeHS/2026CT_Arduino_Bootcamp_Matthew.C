@@ -23,10 +23,13 @@
 
 
 void setup() {
-  
+  Serial.begin(9600);
+  // Analogue pins do not need to be configured unless you want to use one as a digital I/O
 }
 
 void loop() {
-  
+  Serial.print("myVariableResistor:");
+  resistorValue = analogRead(myVariableResistor);
+  Serial.println(resistorValue);
 }
 
