@@ -25,22 +25,45 @@ static unsigned int redLED = 6;
 static unsigned int onboardLED = 13;
 static unsigned int buttonPIN = 4;
 static unsigned int potPIN = A1;
+
+// Debounce parameters
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 100; // milliseconds
+int lastButtonState = LOW;
+int buttonState = LOW;
 bool onSTATE = false;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Serial Monitor Configured for 9600");
-  Serial.println("---");
+  Serial.println("------");
   pinMode(redLED, OUTPUT);
   pinMode(onboardLED, OUTPUT);
   pinMode(buttonPIN, INPUT);
 }
 
 void loop() {
-  int read = digitalRead(buttonPIN);
- if (read == true) {
+  int reading = digitalRead(buttonPIN);
+
+// Check if button changed
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+// If enough time has passed (debounce)
+if ((millis() - lastDebounceTime) > debounceDelay) {
+  if (reading != buttonState) {
+    buttonState = reading;
+
+// Only toggle on a HIGH transition (button press)
+ if (buttonState == HIGH) {
   onSTATE = !onSTATE;
- } 
+    }
+  }
+} 
+
+lastButtonState = reading; // save for next loop
  digitalWrite(onboardLED, onSTATE);
- delay(200);
+ digitalWrite(redLED, onSTATE);
+ delay(10); // Small delay for stability
 }
