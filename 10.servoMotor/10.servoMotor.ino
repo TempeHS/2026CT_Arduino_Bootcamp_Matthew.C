@@ -56,18 +56,18 @@ void setup() {
   delay(3000);
 }
 
-void loop(void) {
+void loop(void) {`  
 
-  static String inputString ="";
-  static bool stringComplete = false;
+String inputString = "10 cm";
+String cleanString = "";
 
-   while (Serial.available()) {
-  char inChar = (char)Serial.read();
+for(unsigned int i = 0; i < inputString.length(); i++) {
+  char inChar = inputString[i];
+  if (inChar != '\n' && inChar != '\r') {
+    cleanString += inChar;
+  }
   if (inChar == '\n') {
-    stringComplete = true;
-    break;
-  } else if (inChar != '\r') {
-    inputString += inChar;
+    cleanString += '_';
   }
 }
 
@@ -77,12 +77,6 @@ void loop(void) {
   myservo.write(RangeInCm);
   Serial.print(RangeInCm);
   Serial.println(" cm");
-
-// Below is test code for the OLED
-   OLED.firstPage();
-  OLED.drawStr(0, 20, RangeInCm);
-  OLED.nextPage();
-  delay(150);
 
   val = analogRead(potpin);         // reads the value of the potentiometer
   val = map(val, 0, 1023, 0, 180);  // scale it to use it with the servo (val)
