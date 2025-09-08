@@ -33,14 +33,15 @@
 
 unsigned static int servoPin = 6;
 unsigned static int usPin = 5;
+unsigned static int LEDPin = 4;
 
 Servo myservo; // create servo object to control a servo
 Ultrasonic us_sensor(usPin); // create ultrasonic object
 
-int potpin = A1; // analog pin used to connect the potentiometer
+int potpin = A1; // analog pin used to connect the 
 int val;         // variable to read the value from the analog pin
 
-// Configure OLED
+// Configure OLEDpotentiometer
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C OLED(U8G2_R0, SCL, SDA, U8X8_PIN_NONE);
 
 void setup() { 
@@ -48,39 +49,29 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Baud 9600");
   Serial.println("------");
-
-  OLED.begin();
-  OLED.setFont(u8g2_font_6x12_tf);
-  OLED.drawStr(0, 10, "Version 0.2");
-  OLED.nextPage();
-  delay(3000);
+  OLED.begin();  
+  pinMode(LEDPin, OUTPUT);
 }
 
-void loop(void) {`  
-
-String inputString = "10 cm";
-String cleanString = "";
-
-for(unsigned int i = 0; i < inputString.length(); i++) {
-  char inChar = inputString[i];
-  if (inChar != '\n' && inChar != '\r') {
-    cleanString += inChar;
-  }
-  if (inChar == '\n') {
-    cleanString += '_';
-  }
+void loop() {
+OLED.clearBuffer();
+ unsigned long RangeInCm;
+ 
+ if (RangeInCm <= 10) {
+  digitalWrite(LEDPin, true);
+  OLED.drawStr(0, 30, "On");
+} else {
+  digitalWrite(LEDPin, false);
+    OLED.drawStr(0, 30, "Off");
 }
 
-   unsigned long RangeInCm;
-  RangeInCm = us_sensor.distanceRead(); // two measurements
-  RangeInCm = map(RangeInCm, 0, 357, 0, 180);
-  myservo.write(RangeInCm);
-  Serial.print(RangeInCm);
-  Serial.println(" cm");
-
-  val = analogRead(potpin);         // reads the value of the potentiometer
-  val = map(val, 0, 1023, 0, 180);  // scale it to use it with the servo (val)
-
-  myservo.write(val);               // sets the servo position according to the potentiometer
-  delay(15);                        // waits for the servo to get there
+RangeInCm = us_sensor.distanceRead();
+String distanceString = String(RangeInCm);
+  int servoAngle = map(RangeInCm, 0, 100, 0, 180);
+  myservo.write(servoAngle);
+String servoString = String(servoAngle);
+OLED.setFont(u8g2_font_6x12_tf);
+OLED.drawStr(0, 10, distanceString.c_str());
+OLED.drawStr(0, 20, servoString.c_str());
+OLED.nextPage();
 }
