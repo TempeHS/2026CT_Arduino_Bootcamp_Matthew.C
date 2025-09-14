@@ -10,7 +10,7 @@ sound is high.
 | Sensor | Use | Pin |
 | --- | --- | --- |
 | Temperature & Humidity | Measure temperature and check humidity | I2C |
-| Light | Sense changes in light | 5 |
-| Sound | Sense auditory changes | 6 |
-| Buzzer | Auditory Alert | 4 |
+| Light | Sense changes in light | A3 |
+| Sound | Sense auditory changes | A2 |
+| Buzzer | Auditory Alert | 5 |
 | OLED | Display Information | I2C |
