@@ -14,3 +14,42 @@ sound is high.
 | Sound | Sense auditory changes | A2 |
 | Buzzer | Auditory Alert | 5 |
 | OLED | Display Information | I2C |
+
+## Pseudocode
+
+BEGIN
+  PROCESS set up sensors (light, sound, temperature and humidity)
+  PROCESS set up OLED display
+  PROCESS set up Buzzer
+WHILE power on = true 
+  PROCESS read Light sensor
+    DISPLAY “Light Level = “ + light sensor reading
+    IF light sensor reading >= 500 = true 
+    PROCESS alert()
+    PROCESS OLEDalert()
+    DISPLAY “Large change in light “
+ELSE 
+  PROCESS read Sound sensor
+    DISPLAY “Sound Level = “ + sound sensor reading
+    IF sound sensor reading >= 500 = true
+    PROCESS alert()
+    PROCESS OLEDalert()
+    DISPLAY “Large change in sound “
+ELSE
+  PROCESS read temperature and humidity sensor
+    DISPLAY “Temperature = “ + temperature sensor reading
+    DISPLAY “Humidity = “ + humidity sensor reading
+    IF temperature change is considered large
+      PROCESS alert()
+      PROCESS OLEDalert()
+      DISPLAY “Large change in temperature “
+ELSE
+    IF humidity change is considered large
+      PROCESS alert()
+      PROCESS OLEDalert()
+      DISPLAY “Large change in humidity  “
+ELSE 
+    RETURN to WHILE power on = true
+    
+ELSE power on = false
+END
