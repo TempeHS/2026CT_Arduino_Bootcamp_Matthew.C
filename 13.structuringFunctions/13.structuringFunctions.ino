@@ -16,37 +16,40 @@
   Student Notes:
     
   Documentation: 
-    https://www.youtube.com/watch?v=mHa1mUd1Kmg
+    https://www.youtube.com/watch?v=mHa1mUd1Kmg 
 
   Schematic:
       
 */
-#include <Arduino.h>
-#include <U8g2lib.h>
-#include <SPI.h>
-#include <Wire.h>
+
 
 #include "Arduino_SensorKit.h"
 
-
-unsigned static int SoundSensor = A2;
+unsigned static int SoundSensor_PIN = A2;
 unsigned static int LightSensor_PIN = A3;
 int Buzzer_PIN = 5;
 bool Buzzer_PIN_State = LOW;
+unsigned long light_reading = 0;
 
-U8G2_SSD1306_128X64_NONAME_F_HW_I2C OLED(U8G2_R0, SCL, SDA, U8X8_PIN_NONE);
+int light(LightSensor_PIN);
 
 void setup() { 
   setupBuzzer ();
   setupTemp_Humid ();
-  setupOLED ();
+
   Serial.begin(9600); 
 }
 
 void loop() {
-  TogglePin(); //Call the TogglePin function
-  digitalWrite(Buzzer_PIN, Buzzer_PIN_State); //Set PIN state
-  DebugBuzzer(); // Write PIN state to the serial monitor for debugging
-  MyDelayFunction(); //Call the MyDelayFunction
+  TogglePin();
+  digitalWrite(Buzzer_PIN, Buzzer_PIN_State);
+  DebugBuzzer(); 
+  MyDelayFunction();
+  light_reading = light.brightnessRead();
+
+
+
+
+  BuzzAlert();
 }
 
