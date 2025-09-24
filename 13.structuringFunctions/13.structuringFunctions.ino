@@ -25,16 +25,17 @@
 
 #include "Arduino_SensorKit.h"
 
-unsigned static int SoundSensor_PIN = A2;
+const int SoundSensor_PIN = A2;
 unsigned static int LightSensor_PIN = A3;
 int Buzzer_PIN = 5;
 bool Buzzer_PIN_State = LOW;
-unsigned long light_reading = 0;
+unsigned long brightnessRead = 0;
 
-int light(LightSensor_PIN);
 
 void setup() { 
   setupBuzzer ();
+  setupLight ();
+  setupSound ();
   setupTemp_Humid ();
 
   Serial.begin(9600); 
@@ -44,11 +45,9 @@ void loop() {
   TogglePin();
   digitalWrite(Buzzer_PIN, Buzzer_PIN_State);
   DebugBuzzer(); 
-  MyDelayFunction();
-  light_reading = light.brightnessRead();
+  MyDelayFunction(); 
 
-
-
+  LightReading();
 
   BuzzAlert();
 }
