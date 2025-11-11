@@ -53,13 +53,13 @@ void SoundReading() {
   long soundRead = 0;
     for(int i=0; i<32; i++)
     {
-        sum += analogRead(soundRead); // sum is an issue pls fix
+        sum += analogRead(soundRead);
     }
     // >>= is a bitwise shift right, the bits literally shift 5 places to the right 2^5 which is mathematically the same as diving by 32 but computationally much quicker.
     // You could also write soundRead /= 32; which is easier to read but slower to compute
     soundRead >>= 5; 
     Serial.print("Average Sensor Read Value:");
     Serial.println(soundRead);
-    delay(10); //REMEMBER TO CHANGE THIS TO WHAT I NEED (TO THE IDIOT)
+    delay(10); 
 }
 
